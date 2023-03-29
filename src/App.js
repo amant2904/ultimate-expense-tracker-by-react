@@ -1,11 +1,12 @@
-import { Container } from 'react-bootstrap';
+import React from 'react';
 import './App.css';
+import Authentication from './components/pages/Authentication';
 
 function App() {
   return (
-    <Container>
-
-    </Container>
+    <React.Fragment>
+      <Authentication />
+    </React.Fragment>
   );
 }
 

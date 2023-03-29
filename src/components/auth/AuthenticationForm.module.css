@@ -1,0 +1,30 @@
+.authForm{
+    border: 1px solid black;
+    border-radius: 22px;
+    float: left;
+    width: 100%;
+    /* margin: 0px 0px 0px 50px; */
+}
+.signUpBtn{
+    background-color: rgb(27, 145, 127) !important;
+    border: none !important;
+    font-size: 22px;
+}
+.signUpBtn:hover{
+    background-color: rgb(38, 178, 157) !important;
+}
+.loginBtn{
+    border: 1px solid black;
+    background: transparent;
+    display: block;
+    margin: 15px auto;
+    font-size: 22px;
+    background-color: white;
+    padding: 7px 20px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+@media (min-width: 992px) and (max-width: 1200px){
+
+}
