@@ -10,9 +10,9 @@ export default function Authentication() {
                 <Col className={`${classes.loginContent}`} lg={7}>
                     <h1>ULTIMATE</h1>
                     <h2>EXPENSE TRACKER</h2>
-                    <h3>Keep Track of each penny expense, You do</h3>
+                    <h3>Keep Track of Each Penny Expense, You do</h3>
                     <div className={`${classes.loginHeadline}`}>
-                        <p>More Than 3.5 million users across the world</p>
+                        <p>More Than 3.5 Million Users across the World</p>
                     </div>
                 </Col>
                 <AuthenticationForm />

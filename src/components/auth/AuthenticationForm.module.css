@@ -13,16 +13,20 @@
 .signUpBtn:hover{
     background-color: rgb(38, 178, 157) !important;
 }
-.loginBtn{
+.optionBtn{
     border: 1px solid black;
     background: transparent;
     display: block;
     margin: 15px auto;
-    font-size: 22px;
+    font-size: 18px;
     background-color: white;
     padding: 7px 20px;
     border-radius: 12px;
     cursor: pointer;
+}
+.optionBtn:hover{
+    background-color: rgb(241, 241, 241);
+    font-weight: 500;
 }
 
 @media (min-width: 992px) and (max-width: 1200px){
