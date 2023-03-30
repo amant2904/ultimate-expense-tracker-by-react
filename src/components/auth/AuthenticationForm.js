@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { Form, Button, Col } from 'react-bootstrap'
 import classes from "./AuthenticationForm.module.css"
 import LoadingSpinner from "../UI/LoadingSpinner"
@@ -9,6 +9,10 @@ export default function AuthenticationForm() {
     const email = useRef();
     const password = useRef();
     const confirmPassword = useRef();
+
+    // window.addEventListener('resize', () => {
+    //     console.log(window.innerWidth);
+    // })
 
     const [signUp, setSignUp] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -42,17 +46,26 @@ export default function AuthenticationForm() {
         }
 
         if (signUp && userPassword !== userConfirmPassword) {
-            alert("Password and Confirm password didn't match");
+            setSuccess({
+                isTrue: true,
+                message: "Password and Confirm Password didn't match"
+            })
             return;
         }
 
         if (userEmail.includes("@") === false) {
-            alert("invalid email address");
+            setSuccess({
+                isTrue: true,
+                message: "Invalid Email Address"
+            })
             return;
         }
 
         if (userPassword.trim().length < 7) {
-            alert("password must be at least 7 characters long");
+            setSuccess({
+                isTrue: true,
+                message: "Password must be at least 7 Characters Long"
+            })
             return;
         }
 
@@ -117,6 +130,37 @@ export default function AuthenticationForm() {
             setLoading(false);
         }
     }
+
+    useEffect(() => {
+        const checkLoggedIn = async () => {
+            const userToken = localStorage.getItem("tokenId");
+            try {
+                const res = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCTW5LuWc52S9DpPQ2hVQuk23_8jUrhY0A", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': "application/json"
+                    },
+                    body: JSON.stringify({
+                        idToken: userToken
+                    })
+                })
+                const data = await res.json();
+                if (!res.ok) {
+                    throw new Error(data.error.message);
+                }
+                if (data.users[0].email === localStorage.getItem("user_email")) {
+                    authCtx.loginStatus_handler(userToken);
+                }
+            }
+            catch (err) {
+                localStorage.removeItem("tokenId");
+                localStorage.removeItem("user_email");
+            }
+        }
+        if (localStorage.getItem("tokenId")) {
+            checkLoggedIn();
+        }
+    }, [authCtx])
 
     return (
         <React.Fragment>
