@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthContextProvider } from './components/store/auth-context';
+import { BrowserRouter } from 'react-router-dom';
 
 // bootstrap configuration
 import "../node_modules/react-bootstrap/dist/react-bootstrap"
@@ -12,7 +13,9 @@ import "../node_modules/bootstrap/dist/css/bootstrap.css"
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthContextProvider>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </AuthContextProvider>
 );
 

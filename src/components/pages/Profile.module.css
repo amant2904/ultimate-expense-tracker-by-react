@@ -1,0 +1,42 @@
+/* edit profile css */
+
+.editFormInput label{
+    text-align: center;
+}
+.editProfileBtn{
+    background-color: #218181 !important;
+    border: none !important;
+    font-size: 22px !important;
+    display: block !important;
+    margin: 30px auto !important;
+}
+.editProfileBtn:hover{
+    background-color: #1a6969 !important;   
+}
+
+.goToHomeBtn{
+    background-color: #218181 !important;
+    border: none !important;
+    color: white !important;
+}
+.goToHomeBtn:hover{
+    background-color: #1a6969 !important;  
+    color: white !important;
+}
+
+/* profile css */
+
+.userProfilePic{
+    border: 1px solid black;
+    height: 300px;
+    width: 250px;
+}
+.userDetails{
+    padding: 15px;
+}
+.userDetails p{
+    font-size: 24px;
+}
+.userDetails div div:nth-child(1) p{
+    font-weight: 500;
+}
