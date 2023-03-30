@@ -1,0 +1,17 @@
+.varifyEmailBox{
+    border: 1px solid black;
+    width: 53% !important;
+    margin: 30px auto !important;
+    padding: 42px 0px;
+}
+.varifyEmailBox h1{
+    font-size: 60px;
+}
+.varifyEmailBox button{
+    border: none;
+    font-size: 32px;
+    padding: 8px 36px;
+    border-radius: 5px;
+    margin: 20px 0px;
+    cursor: pointer;
+}

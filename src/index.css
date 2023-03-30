@@ -28,3 +28,11 @@ code {
     transform: rotate(360deg);
   }
 }
+.primaryBtn{
+  background-color: #218181 !important;
+  color: white !important;
+}
+.primaryBtn:hover{
+  background-color: #1a6969 !important;
+  color: white !important;
+}
