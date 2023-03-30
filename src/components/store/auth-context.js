@@ -5,7 +5,9 @@ const AuthContext = React.createContext({
     isLoggedIn: false,
     loginStatus_handler: () => { },
     fullName: null,
-    photoUrl: null
+    photoUrl: null,
+    verified: false,
+    verificationHandler: () => { }
 })
 
 export default AuthContext;
@@ -17,6 +19,8 @@ const AuthContextProvider = (props) => {
         fullName: null,
         photoUrl: null
     })
+
+    const [verified, setVerified] = useState(false);
 
     const loginStatus_handler = (tokenId, data, profilePhoto) => {
         if (tokenId) {
@@ -37,13 +41,24 @@ const AuthContextProvider = (props) => {
         }
     }
 
+    const verification_handler = (status) => {
+        if (status === true) {
+            setVerified(true);
+        }
+        else {
+            setVerified(false);
+        }
+    }
+
     return (
         <AuthContext.Provider value={{
             tokenId: loginStatus.tokenId,
             isLoggedIn: loginStatus.isLoggedIn,
             loginStatus_handler: loginStatus_handler,
             fullName: loginStatus.fullName,
-            photoUrl: loginStatus.photoUrl
+            photoUrl: loginStatus.photoUrl,
+            verified: verified,
+            verificationHandler: verification_handler
         }}>
             {props.children}
         </AuthContext.Provider>

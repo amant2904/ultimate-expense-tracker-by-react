@@ -116,7 +116,7 @@ export default function AuthenticationForm() {
                 if (!res.ok) {
                     throw new Error(data.error.message)
                 }
-                // console.log(data);
+                console.log(data);
                 localStorage.setItem("tokenId", data.idToken);
                 localStorage.setItem("user_email", data.email);
                 authCtx.loginStatus_handler(data.idToken, data, data.profilePicture);
@@ -146,10 +146,10 @@ export default function AuthenticationForm() {
                     })
                 })
                 const data = await res.json();
+                console.log(data);
                 if (!res.ok) {
                     throw new Error(data.error.message);
                 }
-                // console.log(data);
                 if (data.users[0].email === localStorage.getItem("user_email")) {
                     authCtx.loginStatus_handler(userToken, data.users[0], data.users[0].photoUrl);
                 }
