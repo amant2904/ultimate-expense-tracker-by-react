@@ -72,7 +72,10 @@ export default function Profile(props) {
     }
 
     const authCtx = useContext(AuthContext);
-    // console.log(authCtx);
+
+    const editHandler = () => {
+        props.editProfile();
+    }
 
     return (
         <React.Fragment>
@@ -85,6 +88,7 @@ export default function Profile(props) {
                     {!startEditing && <Button className={`w-auto ${classes.startEditingBtn}`} variant='danger' onClick={startEditing_handler}>Edit Profile</Button>}
                     <Button className='w-auto mx-3' variant='danger' onClick={cancelEditing_handler}>Cancel Updating</Button>
                 </Row>}
+
                 {editing && <Row className={`w-75 mx-auto my-3`}>
                     <Form className='mt-4'>
                         <Form.Group as={Row} className={`mb-3 ${classes.editFormInput}`} controlId="fullname">
@@ -120,14 +124,15 @@ export default function Profile(props) {
                             </Col>
                         </Form.Group>
 
-                        {!loading && <Button className={`${classes.editProfileBtn} px-5 py-2 rounded-4`} onClick={profileUpdate_handler}>Update</Button>}
+                        {!loading && <Button className={`${classes.editProfileBtn} px-5 py-2 rounded-4`} onClick={profileUpdate_handler}>{(startEditing) ? "Edit" : "Update"}</Button>}
                         {loading && <LoadingSpinner loaderSize="70px" />}
                     </Form>
                 </Row>}
 
                 {/* profile page content */}
-                {!editing && <Row className={`w-75 mx-auto my-3 justify-content-start`}>
+                {!editing && <Row className={`w-75 mx-auto my-3 justify-content-between`}>
                     <Link to="/" className={`w-auto btn fs-4 px-4 py-2 ${classes.goToHomeBtn}`} variant='danger'>Go Back to Home</Link>
+                    <Button className={`w-auto ${classes.editBtn}`} onClick={editHandler}>Edit Profile</Button>
                 </Row>}
                 {!editing && <Row className={`mt-4`}>
                     <Col className={`d-flex align-items-center justify-content-center`} sm={5}>

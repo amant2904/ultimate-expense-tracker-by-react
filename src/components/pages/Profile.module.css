@@ -49,3 +49,13 @@
 .userDetails div div:nth-child(1) p{
     font-weight: 500;
 }
+.editBtn{
+    height: fit-content;
+    background-color: #218181 !important;
+    border: none !important;
+    color: white !important;
+}
+.editBtn:hover{
+    background-color: #1a6969 !important;  
+    color: white !important;
+}

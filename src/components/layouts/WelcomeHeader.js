@@ -51,9 +51,7 @@ export default function WelcomeHeader(props) {
                                 Complete Now
                             </Link>
                         </p>}
-                        {/* {((!profile || !fullName) && updatingProfile) && <p>Your Profile is 33% Completed. A Complete Profile always creates Good Impact</p>}
-                        {((!profile && !fullName) && updatingProfile) && <p>Your Profile is 66% Completed. A Complete Profile always creates Good Impact</p>} */}
-                        {updatingProfile && <p>Your Profile is 66% Completed. A Complete Profile always creates Good Impact</p>}
+                        {((!profile || !fullName) && updatingProfile) && <p>Your Profile is 66% Completed. A Complete Profile always creates Good Impact</p>}
                     </div>
                 </Col>
             </Row>
