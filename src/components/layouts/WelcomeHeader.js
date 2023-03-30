@@ -20,6 +20,11 @@ export default function WelcomeHeader(props) {
         history.replace("/");
     }
 
+    const profile = authCtx.photoUrl;
+    const fullName = authCtx.fullName;
+
+    // const incompleteContent = <p></p>
+
     return (
         <Container fluid className={`m-0 p-0`}>
             <Row>
@@ -39,15 +44,19 @@ export default function WelcomeHeader(props) {
                         </div>
                     </div>
                     <div className={`${classes.incompleteProfileBtn}`}>
-                        {!updatingProfile && <p>Your Profile is Incomplete. &nbsp;
+                        {(profile && fullName) && <p>Congratulations, Your Profile is 100% Completed</p>}
+
+                        {((!profile || !fullName) && !updatingProfile) && <p>Your Profile is Incomplete. &nbsp;
                             <Link onClick={updatingHandler} to="/profile" >
                                 Complete Now
                             </Link>
                         </p>}
-                        {updatingProfile && <p>Your Profile is 64% Completed. A Complete Profile always creates Good Impact</p>}
+                        {/* {((!profile || !fullName) && updatingProfile) && <p>Your Profile is 33% Completed. A Complete Profile always creates Good Impact</p>}
+                        {((!profile && !fullName) && updatingProfile) && <p>Your Profile is 66% Completed. A Complete Profile always creates Good Impact</p>} */}
+                        {updatingProfile && <p>Your Profile is 66% Completed. A Complete Profile always creates Good Impact</p>}
                     </div>
                 </Col>
             </Row>
-        </Container>
+        </Container >
     )
 }

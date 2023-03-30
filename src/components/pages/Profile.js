@@ -9,6 +9,13 @@ import Overlay from '../UI/Overlay'
 export default function Profile(props) {
     const editing = props.editing;
 
+    const [startEditing, setStartEditing] = useState(false);
+
+    const startEditing_handler = (e) => {
+        e.preventDefault();
+        setStartEditing(true);
+    }
+
     const [loading, setLoading] = useState(false);
     const [overLay, setOverLay] = useState({
         istrue: false,
@@ -27,6 +34,7 @@ export default function Profile(props) {
 
     const cancelEditing_handler = () => {
         props.editProfile();
+        setStartEditing(false);
     }
 
     const profileUpdate_handler = async (e) => {
@@ -70,11 +78,12 @@ export default function Profile(props) {
         <React.Fragment>
             {overLay.istrue && <Overlay message={overLay.message} onClick={overlayClose_handler} />}
             <Container className={`my-3`}>
-                <h1 className={`text-center`}>{(editing) ? "Edit Profile" : "Profile Details"}</h1>
+                <h1 className={`text-center`}>{(editing) ? "Update Profile" : "Profile Details"}</h1>
 
                 {/* edit profile form */}
                 {editing && <Row className={`w-75 mx-auto my-3 justify-content-end`}>
-                    <Button className='w-auto' variant='danger' onClick={cancelEditing_handler}>Cancel Editing</Button>
+                    {!startEditing && <Button className={`w-auto ${classes.startEditingBtn}`} variant='danger' onClick={startEditing_handler}>Edit Profile</Button>}
+                    <Button className='w-auto mx-3' variant='danger' onClick={cancelEditing_handler}>Cancel Updating</Button>
                 </Row>}
                 {editing && <Row className={`w-75 mx-auto my-3`}>
                     <Form className='mt-4'>
@@ -83,7 +92,10 @@ export default function Profile(props) {
                                 Full Name :
                             </Form.Label>
                             <Col sm={9}>
-                                <Form.Control type="text" placeholder="Enter Name" ref={fullName} />
+                                {(authCtx.fullName && !startEditing) ?
+                                    <Form.Control type="text" placeholder="Enter Name" value={authCtx.fullName} ref={fullName} disabled /> :
+                                    <Form.Control type="text" placeholder="Enter Name" ref={fullName} />
+                                }
                             </Col>
                         </Form.Group>
 
@@ -92,7 +104,10 @@ export default function Profile(props) {
                                 Profile Photo URL :
                             </Form.Label>
                             <Col sm={9}>
-                                <Form.Control type="url" placeholder="Enter URL" ref={photoUrl} />
+                                {(authCtx.photoUrl && !startEditing) ?
+                                    <Form.Control type="url" placeholder="Enter URL" value={authCtx.photoUrl} ref={photoUrl} disabled /> :
+                                    <Form.Control type="url" placeholder="Enter URL" ref={photoUrl} />
+                                }
                             </Col>
                         </Form.Group>
 

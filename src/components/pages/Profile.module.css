@@ -1,7 +1,7 @@
 /* edit profile css */
 
 .editFormInput label{
-    text-align: center;
+    /* text-align: center */
 }
 .editProfileBtn{
     background-color: #218181 !important;
@@ -20,6 +20,15 @@
     color: white !important;
 }
 .goToHomeBtn:hover{
+    background-color: #1a6969 !important;  
+    color: white !important;
+}
+.startEditingBtn{
+    background-color: #218181 !important;
+    border: none !important;
+    color: white !important;
+}
+.startEditingBtn:hover{
     background-color: #1a6969 !important;  
     color: white !important;
 }
