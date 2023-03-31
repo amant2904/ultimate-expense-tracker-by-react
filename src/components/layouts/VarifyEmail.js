@@ -39,12 +39,12 @@ export default function VarifyEmail() {
             })
             const data = await res.json();
             if (!res.ok) {
-                throw new Error(data);
+                throw new Error(data.error.message);
             }
             setVerify(true);
         }
         catch (err) {
-            const message = err.error.message;
+            const message = err.message;
             setOverlay({
                 isTrue: true,
                 message: message
@@ -66,20 +66,23 @@ export default function VarifyEmail() {
                 })
             })
             const data = await res.json();
+            // console.log(data);
             if (!res.ok) {
                 throw new Error(data);
             }
             if (data.users[0].emailVerified === true) {
                 authCtx.verificationHandler(true)
             }
+            else {
+                setVerify(false);
+            }
 
         }
         catch (err) {
-            console.log(err);
-            if (err.error.message) {
+            if (err.message) {
                 setOverlay({
                     isTrue: true,
-                    message: err.error.message
+                    message: err.message
                 })
             }
         }
