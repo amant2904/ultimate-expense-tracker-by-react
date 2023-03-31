@@ -4,22 +4,24 @@ import classes from "./AuthenticationForm.module.css"
 import LoadingSpinner from "../UI/LoadingSpinner"
 import Overlay from '../UI/Overlay'
 import AuthContext from '../store/auth-context'
+import { useHistory } from 'react-router-dom'
 
 export default function AuthenticationForm() {
     const email = useRef();
     const password = useRef();
     const confirmPassword = useRef();
 
-    // window.addEventListener('resize', () => {
-    //     console.log(window.innerWidth);
-    // })
-
-    const [signUp, setSignUp] = useState(true);
+    const [signUp, setSignUp] = useState(false);
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState({
         isTrue: false,
         message: ""
     });
+
+    const history = useHistory();
+    const forgetPassword_handler = () => {
+        history.push("/forget-password");
+    }
 
     const authOption_handler = () => {
         setSignUp((prv) => {
@@ -170,7 +172,7 @@ export default function AuthenticationForm() {
             <Col lg={4} className={`d-flex flex-column`}>
                 <Col className={`p-4 bg-light shadow-lg ${classes.authForm}`}>
                     <h1 className={`text-center my-1`}>{(signUp) ? "Sign Up" : "Login"}</h1>
-                    <Form onSubmit={auth_handler}>
+                    <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail">
                             <Form.Label>Email address</Form.Label>
                             <Form.Control type="email" placeholder="Enter email" ref={email} />
@@ -188,8 +190,9 @@ export default function AuthenticationForm() {
                             <Form.Label>Confirm Password</Form.Label>
                             <Form.Control type="password" placeholder="Password" ref={confirmPassword} />
                         </Form.Group>}
+                        {!signUp && <button className={`${classes.forgetBtn}`} onClick={forgetPassword_handler}>Forget Password ?</button>}
 
-                        {!loading && <Button variant="primary" type="submit" className={`d-block m-auto py-2 px-4 ${classes.signUpBtn}`}>
+                        {!loading && <Button onClick={auth_handler} variant="primary" type="submit" className={`d-block m-auto py-2 px-4 ${classes.signUpBtn}`}>
                             {(signUp) ? "Sign Up" : "Login"}
                         </Button>}
                         {loading && <LoadingSpinner loaderSize="60px" />}

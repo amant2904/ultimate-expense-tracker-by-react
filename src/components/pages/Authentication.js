@@ -2,6 +2,8 @@ import React from 'react'
 import { Col, Container, Row } from 'react-bootstrap'
 import AuthenticationForm from '../auth/AuthenticationForm'
 import classes from "./Authentication.module.css"
+import ForgetPassword from '../auth/ForgetPassword'
+import { Route, Switch } from 'react-router-dom'
 
 export default function Authentication() {
     return (
@@ -15,7 +17,14 @@ export default function Authentication() {
                         <p>More Than 3.5 Million Users across the World</p>
                     </div>
                 </Col>
-                <AuthenticationForm />
+                <Switch>
+                    <Route exact path="/">
+                        <AuthenticationForm />
+                    </Route>
+                    <Route path="/forget-password">
+                        <ForgetPassword />
+                    </Route>
+                </Switch>
             </Row>
         </Container>
     )
