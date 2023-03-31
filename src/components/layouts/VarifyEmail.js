@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useContext } from 'react'
 import { Container } from 'react-bootstrap'
 import classes from "./VarifyEmail.module.css"
 import LoadingSpinner from '../UI/LoadingSpinner';
@@ -70,11 +70,7 @@ export default function VarifyEmail() {
                 throw new Error(data);
             }
             if (data.users[0].emailVerified === true) {
-                authCtx.verificationHandler(true);
-                setOverlay({
-                    isTrue: true,
-                    message: "Email Verified Successfully"
-                })
+                authCtx.verificationHandler(true)
             }
 
         }
@@ -91,9 +87,8 @@ export default function VarifyEmail() {
     }, [authCtx])
 
     useEffect(() => {
-        checkVerification_handler()
+        checkVerification_handler();
     }, [checkVerification_handler, authCtx])
-
 
     return (
         <React.Fragment>

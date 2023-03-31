@@ -14,7 +14,7 @@ export default function Welcome() {
     }
 
     const authCtx = useContext(AuthContext);
-    console.log(authCtx.verified);
+    // console.log(authCtx.verified);
 
     return (
         <Container className={`${classes.welcome}`} fluid>

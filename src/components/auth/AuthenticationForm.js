@@ -116,19 +116,20 @@ export default function AuthenticationForm() {
                 if (!res.ok) {
                     throw new Error(data.error.message)
                 }
-                console.log(data);
+                // console.log(data);
                 localStorage.setItem("tokenId", data.idToken);
                 localStorage.setItem("user_email", data.email);
                 authCtx.loginStatus_handler(data.idToken, data, data.profilePicture);
+                setLoading(false);
             }
             catch (err) {
+                setLoading(false);
                 const message = err.message;
                 setSuccess({
                     isTrue: true,
                     message: message
                 })
             }
-            setLoading(false);
         }
     }
 
@@ -146,7 +147,6 @@ export default function AuthenticationForm() {
                     })
                 })
                 const data = await res.json();
-                console.log(data);
                 if (!res.ok) {
                     throw new Error(data.error.message);
                 }

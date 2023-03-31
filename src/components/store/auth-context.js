@@ -38,6 +38,7 @@ const AuthContextProvider = (props) => {
                 fullName: null,
                 photoUrl: null
             })
+            setVerified(false);
         }
     }
 
