@@ -1,0 +1,69 @@
+.mainHeading{
+    font-size: 50px;
+    position: sticky;
+    top: 50px;
+}
+.table_row th{
+    text-align: center;
+    font-size: 22px;
+}
+.table_row td{
+    text-align: center;
+    font-size: 19px;
+}
+.filterRow{
+    width: 90%;
+    margin: 0px auto 1rem auto;
+    border: 1px solid black;
+    padding: 7px 10px;
+    border-radius: 22px;
+    background-color: #218181;
+    color: white;
+}
+.filterRow h2{
+    margin: 0;
+}
+.filterRow select{
+    margin-right: 20px;
+    font-size: 22px;
+    font-weight: 500;
+    padding: 5px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+}
+.newExpense_col{
+    margin: 0;
+    padding: 0;
+}
+.fixedPart{
+    position: fixed;
+}
+.newExpense_btn{
+    overflow: hidden;
+    background-color: #218181;
+    height: 49px;
+    width: 178px;
+    margin-top: 83px;
+    border-radius: 0px 30px 30px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.newExpense_btn button{
+    padding: 10px 13px;
+    border: none;
+    font-size: 19px;
+    background-color: transparent;
+    color: white;
+}
+.newExpense_btn:hover{
+    background-color: #1a6969;
+}
+
+.deleteBtn{
+    margin-top: 19px;
+    padding: 9px 20px !important;
+    border: none !important;
+    font-size: 17px !important;
+    border-radius: 0px 30px 30px 0px !important;
+}

@@ -26,7 +26,7 @@ export default function WelcomeHeader(props) {
     // const incompleteContent = <p></p>
 
     return (
-        <Container fluid className={`m-0 p-0`}>
+        <Container fluid className={`m-0 p-0 fixed ${classes.header}`}>
             <Row>
                 <Col>
                     <div className={`${classes.logo}`}>
