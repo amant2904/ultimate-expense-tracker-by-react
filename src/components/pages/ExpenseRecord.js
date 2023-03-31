@@ -1,47 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import classes from "./ExpenseRecord.module.css"
 import { Container, Row, Table, Col, Button } from 'react-bootstrap'
 import NewExpense from './NewExpense';
 
 export default function ExpenseRecord() {
-    const [expenses, setExpenses] = useState([
-        {
-            amount: 200,
-            descr: "purchased books",
-            category: "Study",
-            date: "04/29/2000"
-        },
-        {
-            amount: 200,
-            descr: "purchased books rklfjkr frlkfdlkj",
-            category: "Study",
-            date: "04/29/2000"
-        },
-        {
-            amount: 200,
-            descr: "purchased books",
-            category: "Study",
-            date: "04/29/2000"
-        },
-        {
-            amount: 200,
-            descr: "purchased books",
-            category: "Study",
-            date: "04/29/2000"
-        },
-        {
-            amount: 200,
-            descr: "purchased books",
-            category: "Study",
-            date: "04/29/2000"
-        },
-        {
-            amount: 200,
-            descr: "purchased books",
-            category: "Study",
-            date: "04/29/2000"
-        }
-    ])
+    const [expenses, setExpenses] = useState([])
 
     const add_expense = (obj) => {
         setExpenses((prv) => [obj, ...prv]);
@@ -60,6 +23,45 @@ export default function ExpenseRecord() {
     const newExpense_handler = () => {
         setNewExpense((prv) => !prv);
     }
+    // console.log(111);
+
+    useEffect(() => {
+        // console.log(111);
+        const userEmail = localStorage.getItem("user_email");
+        let filtered_email = "";
+
+        for (let i in userEmail) {
+            if (userEmail[i] !== "." && userEmail[i] !== "@") {
+                filtered_email += userEmail[i]
+            }
+        }
+
+        const firstFetch = async () => {
+            try {
+                const res = await fetch(`https://ultimate-expense-tracker-8f09c-default-rtdb.firebaseio.com/${filtered_email}.json`)
+                const data = await res.json();
+                // console.log(data);
+                if (!res.ok) {
+                    throw new Error(data.error.message);
+                }
+                let all_expenses = [];
+                for (let key in data) {
+                    all_expenses.push({
+                        id: key,
+                        date: data[key].date,
+                        amount: data[key].amount,
+                        category: data[key].category,
+                        descr: data[key].descr
+                    })
+                }
+                setExpenses(all_expenses);
+            }
+            catch (err) {
+                console.log(err.message);
+            }
+        }
+        firstFetch();
+    }, [])
 
     return (
         <React.Fragment>
@@ -98,7 +100,7 @@ export default function ExpenseRecord() {
                             </thead>
                             <tbody>
                                 {expenses.map((expense) => {
-                                    return <tr className={`${classes.table_row}`}>
+                                    return <tr className={`${classes.table_row}`} key={expense.id}>
                                         <td>{expense.date}</td>
                                         <td>Rs. <span>{expense.amount}</span></td>
                                         <td>{expense.descr}</td>
@@ -109,6 +111,7 @@ export default function ExpenseRecord() {
                                         {dlt && <td>
                                             <Button variant='danger' className={`btn`}>Delete</Button>
                                         </td>}
+                                        <td hidden>{expense.id}</td>
                                     </tr>
                                 })}
                             </tbody>
