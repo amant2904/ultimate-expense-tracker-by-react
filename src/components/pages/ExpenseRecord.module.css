@@ -12,13 +12,13 @@
     font-size: 19px;
 }
 .filterRow{
-    width: 90%;
-    margin: 0px auto 1rem auto;
-    border: 1px solid black;
-    padding: 7px 10px;
-    border-radius: 22px;
-    background-color: #218181;
-    color: white;
+    width: 90% !important;
+    margin: 0px auto 1rem auto !important;
+    border: 1px solid black !important;
+    padding: 7px 10px !important;
+    border-radius: 22px !important;
+    background-color: #218181 !important;
+    color: white !important;
 }
 .filterRow h2{
     margin: 0;
@@ -32,32 +32,28 @@
     cursor: pointer;
 }
 .newExpense_col{
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 .fixedPart{
     position: fixed;
 }
 .newExpense_btn{
-    overflow: hidden;
-    background-color: #218181;
-    height: 49px;
-    width: 178px;
+    /* padding: 10px 13px; */
+    display: block;
     margin-top: 83px;
+    /* width: 178px; */
+    padding: 0px 20px;
+    height: 49px;
     border-radius: 0px 30px 30px 0px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.newExpense_btn button{
-    padding: 10px 13px;
     border: none;
     font-size: 19px;
-    background-color: transparent;
+    /* background-color: transparent; */
     color: white;
+    background-color: #218181 !important;
 }
 .newExpense_btn:hover{
-    background-color: #1a6969;
+    background-color: #1a6969 !important;
 }
 
 .deleteBtn{

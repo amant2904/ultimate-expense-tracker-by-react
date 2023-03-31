@@ -27,9 +27,6 @@ export default function Welcome() {
                 {authCtx.verified && <Route exact path="/">
                     <ExpenseRecord />
                 </Route>}
-                {authCtx.verified && <Route path="/new-expense">
-
-                </Route>}
                 <Route path="/profile">
                     <Profile editing={editing} editProfile={editProfile_handler} />
                 </Route>
