@@ -1,0 +1,13 @@
+.table_row td{
+    text-align: center;
+    font-size: 19px;
+}
+.tableRow_form td input{
+    display: block;
+    margin: auto;
+}
+.tableRow_form td button{
+    width: auto;
+    display: block;
+    margin: auto;
+}

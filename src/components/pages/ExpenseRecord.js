@@ -2,43 +2,145 @@ import React, { useEffect, useState } from 'react'
 import classes from "./ExpenseRecord.module.css"
 import { Container, Row, Table, Col, Button } from 'react-bootstrap'
 import NewExpense from './NewExpense';
+import Overlay from "../UI/Overlay";
+import ExpenseItem from '../layouts/ExpenseItem';
+import Filter from '../layouts/Filter';
 
 export default function ExpenseRecord() {
-    const [expenses, setExpenses] = useState([])
 
-    const add_expense = (obj) => {
-        setExpenses((prv) => [obj, ...prv]);
-        setNewExpense(false);
+    // api url --------------------------
+    const userEmail = localStorage.getItem("user_email");
+    let filtered_email = "";
+
+    for (let i in userEmail) {
+        if (userEmail[i] !== "." && userEmail[i] !== "@") {
+            filtered_email += userEmail[i]
+        }
     }
 
-    const [edit, setEdit] = useState(true);
+    const api_url = `https://ultimate-expense-tracker-8f09c-default-rtdb.firebaseio.com/${filtered_email}`
+
+    // ______________________________
+
+    const [overlay, setOverlay] = useState({
+        isTrue: false,
+        message: ""
+    })
     const [dlt, setDlt] = useState(false);
+    const [edit, setEdit] = useState(true);
     const [newExpense, setNewExpense] = useState(false);
+    const [expenses, setExpenses] = useState([]);
+    const [filteredExpenses, setFilteredExpenses] = useState([]);
+
+    // console.log(expenses);
+    // console.log(filteredExpenses);
+
+    const newExpense_handler = () => {
+        setNewExpense((prv) => !prv);
+    }
 
     const edit_dlt_handler = () => {
         setEdit((prv) => !prv);
         setDlt((prv) => !prv);
     }
 
-    const newExpense_handler = () => {
-        setNewExpense((prv) => !prv);
+    const overlayClose_handler = () => {
+        setOverlay({
+            isTrue: false,
+            message: ""
+        })
     }
-    // console.log(111);
+
+    const filterExpense_handler = (filterValue) => {
+        if (filterValue === "all") {
+            setFilteredExpenses(expenses);
+        }
+        else {
+            const filterExpenses = expenses.filter((expenseItem) => {
+                const year = new Date(expenseItem.date).getFullYear();
+                if (year.toString() === filterValue) {
+                    return expenseItem;
+                }
+                return null;
+            })
+            setFilteredExpenses(filterExpenses);
+        }
+    }
+
+    const add_expense = (obj) => {
+        setExpenses((prv) => {
+            return [...prv, obj]
+        });
+        setNewExpense(false);
+    }
+
+    const editExpense_handler = async (newDetails) => {
+        try {
+            const res = await fetch(`${api_url}/${newDetails.id}.json`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify(newDetails)
+            })
+            const data = await res.json();
+            // console.log(data);
+            if (!res.ok) {
+                throw new Error(data.error);
+            }
+            const index = expenses.findIndex((expense) => {
+                return expense.id === newDetails.id
+            })
+            const newExpenses = [...expenses];
+            newExpenses[index] = newDetails;
+            setExpenses(newExpenses);
+            return true;
+        }
+        catch (err) {
+            setOverlay({
+                isTrue: true,
+                message: err.message
+            })
+            return false;
+        }
+    }
+
+    const deleteExpense_handler = async (id) => {
+        try {
+            const res = await fetch(`${api_url}/${id}.json`, {
+                method: 'DELETE'
+            })
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error(data.error);
+            }
+            const index = expenses.findIndex((expense) => {
+                return expense.id === id
+            })
+            // console.log(index);
+            // console.log(expenses);
+            const newExpenses = [...expenses];
+            newExpenses.splice(index, 1);
+            // console.log(newExpenses);
+            setExpenses(newExpenses);
+            setOverlay({
+                isTrue: true,
+                message: "Deleted Successfully"
+            })
+        }
+        catch (err) {
+            console.log(err)
+            setOverlay({
+                isTrue: true,
+                message: "Unable To Delete"
+            })
+        }
+    }
 
     useEffect(() => {
-        // console.log(111);
-        const userEmail = localStorage.getItem("user_email");
-        let filtered_email = "";
-
-        for (let i in userEmail) {
-            if (userEmail[i] !== "." && userEmail[i] !== "@") {
-                filtered_email += userEmail[i]
-            }
-        }
-
         const firstFetch = async () => {
             try {
-                const res = await fetch(`https://ultimate-expense-tracker-8f09c-default-rtdb.firebaseio.com/${filtered_email}.json`)
+                const res = await fetch(`${api_url}.json`)
                 const data = await res.json();
                 // console.log(data);
                 if (!res.ok) {
@@ -55,16 +157,22 @@ export default function ExpenseRecord() {
                     })
                 }
                 setExpenses(all_expenses);
+                setFilteredExpenses(all_expenses);
             }
             catch (err) {
                 console.log(err.message);
             }
         }
         firstFetch();
-    }, [])
+        // return () => {
+        //     console.log(111);
+        //     setFilteredExpenses(expenses);
+        // }
+    }, [api_url])
 
     return (
         <React.Fragment>
+            {overlay.isTrue && <Overlay message={overlay.message} onClick={overlayClose_handler} />}
             <Container fluid className={`m-0 p-0`}>
                 {!newExpense && <h1 className={`text-center ${classes.mainHeading}`}>Expense Records</h1>}
                 {newExpense && <h1 className={`text-center ${classes.mainHeading}`}>Add New Expense</h1>}
@@ -76,17 +184,7 @@ export default function ExpenseRecord() {
                         </Col>
                     </Col>
                     {!newExpense && <Col lg={8}>
-                        <Row className={`justify-content-between align-items-center ${classes.filterRow}`}>
-                            <h2 className={`w-auto`}>Filter By Year :-</h2>
-                            <select name="year" id="year" className={`w-auto`}>
-                                <option value="2023">2023</option>
-                                <option value="2023">2023</option>
-                                <option value="2023">2023</option>
-                                <option value="2023">2023</option>
-                                <option value="2023">2023</option>
-                                <option value="2023">2023</option>
-                            </select>
-                        </Row>
+                        <Filter filterExpense={filterExpense_handler} />
                         <Table className={``}>
                             <thead>
                                 <tr className={`${classes.table_row}`}>
@@ -95,25 +193,16 @@ export default function ExpenseRecord() {
                                     <th>Description</th>
                                     <th>Category</th>
                                     {/* {edit && <th>Edit</th>} */}
-                                    {dlt && <th>Delete</th>}
+                                    {/* {dlt && <th>Delete</th>} */}
                                 </tr>
                             </thead>
                             <tbody>
-                                {expenses.map((expense) => {
-                                    return <tr className={`${classes.table_row}`} key={expense.id}>
-                                        <td>{expense.date}</td>
-                                        <td>Rs. <span>{expense.amount}</span></td>
-                                        <td>{expense.descr}</td>
-                                        <td>{expense.category}</td>
-                                        {edit && <td>
-                                            <Button variant='warning' className={`btn`}>Edit</Button>
-                                        </td>}
-                                        {dlt && <td>
-                                            <Button variant='danger' className={`btn`}>Delete</Button>
-                                        </td>}
-                                        <td hidden>{expense.id}</td>
-                                    </tr>
+                                {filteredExpenses.map((expense) => {
+                                    return <ExpenseItem key={expense.id} edit={edit} dlt={dlt} expense={expense} editExpense={editExpense_handler} deleteExpense={deleteExpense_handler} />
                                 })}
+                                {filteredExpenses.length === 0 && <tr>
+                                    <td colSpan={4}><h2 className='text-center'>No Expenses Yet...</h2></td>
+                                </tr>}
                             </tbody>
                         </Table>
                     </Col>}

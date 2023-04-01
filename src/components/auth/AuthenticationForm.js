@@ -150,6 +150,7 @@ export default function AuthenticationForm() {
                 })
                 const data = await res.json();
                 if (!res.ok) {
+                    console.log(data);
                     throw new Error(data.error.message);
                 }
                 if (data.users[0].email === localStorage.getItem("user_email")) {

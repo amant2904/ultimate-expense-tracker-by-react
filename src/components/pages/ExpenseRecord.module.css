@@ -7,30 +7,6 @@
     text-align: center;
     font-size: 22px;
 }
-.table_row td{
-    text-align: center;
-    font-size: 19px;
-}
-.filterRow{
-    width: 90% !important;
-    margin: 0px auto 1rem auto !important;
-    border: 1px solid black !important;
-    padding: 7px 10px !important;
-    border-radius: 22px !important;
-    background-color: #218181 !important;
-    color: white !important;
-}
-.filterRow h2{
-    margin: 0;
-}
-.filterRow select{
-    margin-right: 20px;
-    font-size: 22px;
-    font-weight: 500;
-    padding: 5px 20px;
-    border-radius: 9px;
-    cursor: pointer;
-}
 .newExpense_col{
     margin: 0 !important;
     padding: 0 !important;

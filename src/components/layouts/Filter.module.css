@@ -1,0 +1,23 @@
+.filterRow{
+    width: 90% !important;
+    margin: 0px auto 1rem auto !important;
+    border: 1px solid black !important;
+    padding: 7px 10px !important;
+    border-radius: 22px !important;
+    background-color: #218181 !important;
+    color: white !important;
+}
+.filterRow:hover{
+    background-color: #1a6969 !important;
+}
+.filterRow h2{
+    margin: 0;
+}
+.filterRow select{
+    margin-right: 20px;
+    font-size: 22px;
+    font-weight: 500;
+    padding: 5px 20px;
+    border-radius: 9px;
+    cursor: pointer;
+}
