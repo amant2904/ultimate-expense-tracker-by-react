@@ -6,7 +6,8 @@ const initialState = {
     fullName: null,
     photoUrl: null,
     verified: false,
-    api_key: "AIzaSyCTW5LuWc52S9DpPQ2hVQuk23_8jUrhY0A"
+    api_key: "AIzaSyCTW5LuWc52S9DpPQ2hVQuk23_8jUrhY0A",
+    premium: false
 }
 
 const authSlice = createSlice({
@@ -33,6 +34,9 @@ const authSlice = createSlice({
             else {
                 state.verified = false;
             }
+        },
+        premium(state) {
+            state.premium = true;
         }
     }
 })

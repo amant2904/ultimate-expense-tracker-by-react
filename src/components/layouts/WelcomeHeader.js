@@ -16,6 +16,7 @@ export default function WelcomeHeader(props) {
     // const authCtx = useContext(AuthContext);
     const dispatch = useDispatch();
     const history = useHistory();
+    const isPremium = useSelector(state => state.auth.premium);
     const logout_handler = () => {
         localStorage.removeItem("tokenId");
         localStorage.removeItem("user_email");
@@ -36,7 +37,8 @@ export default function WelcomeHeader(props) {
                 <Col>
                     <div className={`${classes.logo}`}>
                         <h1>ULTIMATE</h1>
-                        <h2>EXPENSE TRACKER</h2>
+                        <h2 className={`m-0`}>EXPENSE TRACKER</h2>
+                        {isPremium && <p className={`${classes.premiumTag}`}>Premium</p>}
                     </div>
                 </Col>
                 <Col className={`p-0 d-flex flex-column align-items-end`}>

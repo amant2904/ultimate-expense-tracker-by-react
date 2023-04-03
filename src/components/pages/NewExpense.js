@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import PremiumBtn from '../layouts/PremiumBtn';
 
 export default function NewExpense(props) {
+    const isPremium = useSelector(state => state.auth.premium);
     const [premiumBtn, setPremiumBtn] = useState(false);
     const [loading, setLoading] = useState(false);
     const amount = useRef();
@@ -22,7 +23,7 @@ export default function NewExpense(props) {
 
     const addExpense_handler = async (e) => {
         e.preventDefault();
-        if (totalAmount + parseInt(amount.current.value) > 10000) {
+        if (!isPremium && totalAmount + parseInt(amount.current.value) > 10000) {
             setPremiumBtn(true);
             return;
         }

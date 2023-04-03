@@ -28,6 +28,13 @@
     font-size: 22px;
     display: inline;
 }
+.premiumTag{
+    margin: 4px 0px 0px 113px;
+    background-color: #56c746;
+    width: fit-content;
+    padding: 0px 6px;
+    color: white;
+}
 
 /* profile functions css */
 .profileFunction{
@@ -80,7 +87,7 @@
 }
 .incompleteProfileBtn p{
     background-color: #218181;
-    padding: 7px 13px;
+    padding: 7px 19px;
     color: white;
     border-radius: 20px 0px 0px 20px;
 }

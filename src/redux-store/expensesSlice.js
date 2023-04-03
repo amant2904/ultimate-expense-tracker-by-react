@@ -23,7 +23,7 @@ const expensesSlice = createSlice({
             const total = state.allExpense.reduce((init, expense) => {
                 return init += parseInt(expense.amount);
             }, 0)
-            state.totalAmount += total;
+            state.totalAmount = total;
         }
     }
 })

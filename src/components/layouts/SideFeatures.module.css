@@ -35,3 +35,11 @@
     background-color: rgb(177, 87, 23);
     color: white !important;
 }
+.premiumBtn{
+    margin-top: 130px;
+    background-color: #4daf3f !important;
+    color: white;
+}
+.premiumBtn:hover{
+    background-color: #409635 !important;;
+}

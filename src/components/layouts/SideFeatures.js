@@ -3,12 +3,17 @@ import { Col } from 'react-bootstrap'
 import classes from "./SideFeatures.module.css"
 import { useDispatch, useSelector } from 'react-redux'
 import { themeActions } from '../../redux-store/themeSlice'
-import { Link } from 'react-router-dom'
+import { authActions } from '../../redux-store/authSlice'
 
 export default function SideFeatures() {
     const themeMode = useSelector(state => state.theme.mode);
     const expenses = useSelector(state => state.expenses.allExpense);
+    const isPremium = useSelector(state => state.auth.premium);
     const dispatch = useDispatch();
+    const premiumEnable_handler = () => {
+        dispatch(authActions.premium());
+    }
+
     const themeMode_handler = () => {
         dispatch(themeActions.changeTheme());
     }
@@ -38,8 +43,9 @@ export default function SideFeatures() {
     }
     return (
         <Col lg={2} className={`${classes.sideFeatures}`}>
-            <button onClick={themeMode_handler} className={`${classes.side_btn} ${(themeMode) ? classes.darkThemeBtn : classes.lightThemeBtn}`}>{(themeMode) ? "Enable Dark Mode" : "Enable Light Mode"}</button>
-            <button onClick={downloadHandler} id='d-link' className={`${classes.side_btn} ${classes.downloadBtn}`}>Download expenses</button>
+            {!isPremium && <button onClick={premiumEnable_handler} id='d-link' className={`${classes.side_btn} ${classes.premiumBtn}`}>Get Premium</button>}
+            {isPremium && <button onClick={themeMode_handler} className={`${classes.side_btn} ${(themeMode) ? classes.darkThemeBtn : classes.lightThemeBtn}`}>{(themeMode) ? "Enable Dark Mode" : "Enable Light Mode"}</button>}
+            {isPremium && <button onClick={downloadHandler} id='d-link' className={`${classes.side_btn} ${classes.downloadBtn}`}>Download expenses</button>}
         </Col>
     )
 }

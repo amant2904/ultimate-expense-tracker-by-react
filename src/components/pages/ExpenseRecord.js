@@ -194,8 +194,8 @@ export default function ExpenseRecord() {
                             </tbody>
                         </Table>
                         <Row className={`justify-content-between align-items-center px-5`}>
-                            <p className={`w-auto fs-3`}><b>Total Expense :-</b></p>
-                            <p className={`w-auto fs-3 bg-dark text-light`}>Rs. <span>{totalAmount}</span></p>
+                            <p className={`w-auto fs-3 m-0`}><b>Total Expense :-</b></p>
+                            <p className={`w-auto fs-3 bg-dark text-light my-2`}>Rs. <span>{totalAmount}</span></p>
                         </Row>
                     </Col>}
                     {newExpense && <NewExpense cancelAdding={newExpense_handler} addExpense={add_expense} />}
