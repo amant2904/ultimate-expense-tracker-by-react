@@ -3,8 +3,11 @@ import React, { useRef, useState } from 'react'
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import LoadingSpinner from "../UI/LoadingSpinner"
 import { useSelector } from 'react-redux';
+import PremiumBtn from '../layouts/PremiumBtn';
 
 export default function NewExpense(props) {
+    const [premiumBtn, setPremiumBtn] = useState(false);
+    const [loading, setLoading] = useState(false);
     const amount = useRef();
     const expenseDate = useRef();
     const category = useRef();
@@ -12,9 +15,17 @@ export default function NewExpense(props) {
 
     const database_api = useSelector(state => state.expenses.database_api);
 
-    const [loading, setLoading] = useState(false);
+    const cancel_premium = () => {
+        setPremiumBtn(false);
+    }
+
     const addExpense_handler = async (e) => {
         e.preventDefault();
+        if (parseInt(amount.current.value) > 10000) {
+            setPremiumBtn(true);
+            return;
+        }
+
         const expense_details = {
             amount: amount.current.value,
             date: expenseDate.current.value,
@@ -40,7 +51,6 @@ export default function NewExpense(props) {
                 body: JSON.stringify(expense_details)
             })
             const data = await res.json();
-            // console.log(data);
             if (!res.ok) {
                 throw new Error(data.error);
             }
@@ -58,7 +68,7 @@ export default function NewExpense(props) {
 
     return (
         <React.Fragment>
-            <Col lg={8}>
+            {!premiumBtn && <Col lg={8}>
                 <Button variant='danger' onClick={props.cancelAdding} className={`my-4 px-4 py-2`}>Cancel Adding Expense</Button>
                 <Form>
                     <Row>
@@ -98,7 +108,8 @@ export default function NewExpense(props) {
                 </Form>
                 {!loading && <Button className={`primaryBtn px-5 py-2 mt-3 d-block m-auto fs-3`} onClick={addExpense_handler}>Add Expense</Button>}
                 {loading && <LoadingSpinner loaderSize="60px" />}
-            </Col>
+            </Col>}
+            {premiumBtn && <PremiumBtn cancel={cancel_premium} />}
         </React.Fragment>
     )
 }

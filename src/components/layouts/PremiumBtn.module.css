@@ -1,0 +1,19 @@
+.premiumBtn{
+    padding: 4px 21px !important;
+    font-size: 31px !important;
+    background-color: #4daf3f !important;
+    border: none !important;
+}
+.premiumBtn:hover{
+    background-color: #409635 !important;
+}
+.cancelPremium{
+    border: none;
+    background-color: transparent;
+    font-size: 22px;
+    cursor: pointer;
+}
+.cancelPremium:hover{
+    background-color: black;
+    color: white;
+}

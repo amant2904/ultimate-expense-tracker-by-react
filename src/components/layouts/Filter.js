@@ -1,17 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Row } from 'react-bootstrap'
 import classes from "./Filter.module.css"
 
 export default function Filter(props) {
 
+    const [value, setValue] = useState("");
+
     const selectYear_handler = (e) => {
+        setValue(e.target.value);
         props.filterExpense(e.target.value);
     }
 
     return (
         <Row className={`justify-content-between align-items-center ${classes.filterRow}`}>
             <h2 className={`w-auto`}>Filter By Year :-</h2>
-            <select name="year" id="year" className={`w-auto`} onChange={selectYear_handler}>
+            <select name="year" id="year" className={`w-auto`} onChange={selectYear_handler} value={value}>
                 <option value="all">All</option>
                 <option value="2023">2023</option>
                 <option value="2022">2022</option>

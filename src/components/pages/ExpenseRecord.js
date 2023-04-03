@@ -32,13 +32,13 @@ export default function ExpenseRecord() {
     const [dlt, setDlt] = useState(false);
     const [edit, setEdit] = useState(true);
     const [newExpense, setNewExpense] = useState(false);
-    // const [expenses, setExpenses] = useState([]);
     const expenses = useSelector(state => state.expenses.allExpense);
     const [filteredExpenses, setFilteredExpenses] = useState([]);
     const dispatch = useDispatch();
 
     const newExpense_handler = () => {
         setNewExpense((prv) => !prv);
+        setFilteredExpenses(expenses);
     }
 
     const edit_dlt_handler = () => {
@@ -53,7 +53,10 @@ export default function ExpenseRecord() {
         })
     }
 
+    const [filterYear, setFilterYear] = useState("all");
     const filterExpense_handler = (filterValue) => {
+
+        setFilterYear(filterValue)
         if (filterValue === "all") {
             setFilteredExpenses(expenses);
         }
@@ -70,14 +73,8 @@ export default function ExpenseRecord() {
     };
 
     const add_expense = (obj) => {
-        // add in expenses\
+        // add in expenses
         dispatch(expensesActions.addExpense(obj));
-
-
-        // add in filtered expenses
-        setFilteredExpenses((prv) => {
-            return [...prv, obj];
-        })
         setNewExpense(false);
     }
 
@@ -103,15 +100,6 @@ export default function ExpenseRecord() {
             const newExpenses = [...expenses];
             newExpenses[index] = newDetails;
             dispatch(expensesActions.editExpense(newExpenses));
-
-            //  edit in filtered expenses
-            const filterIndex = filteredExpenses.findIndex((item) => {
-                return item.id === newDetails.id;
-            })
-            const newFilteredExpenses = [...filteredExpenses];
-            newFilteredExpenses[filterIndex] = newDetails;
-            setFilteredExpenses(newFilteredExpenses);
-
             return true;
         }
         catch (err) {
@@ -140,14 +128,6 @@ export default function ExpenseRecord() {
             const newExpenses = [...expenses];
             newExpenses.splice(index, 1);
             dispatch(expensesActions.editExpense(newExpenses));
-
-            // delete from filtered expenses
-            const filterIndex = filteredExpenses.findIndex((item) => {
-                return item.id === id;
-            })
-            const newFilteredExpenses = [...filteredExpenses];
-            newFilteredExpenses.splice(filterIndex, 1);
-            setFilteredExpenses(newFilteredExpenses);
 
             setOverlay({
                 isTrue: true,
@@ -192,6 +172,12 @@ export default function ExpenseRecord() {
         firstFetch();
     }, [api_url, dispatch])
 
+    useEffect(() => {
+        if (filterYear) {
+            filterExpense_handler(filterYear);
+        }
+    }, [expenses]);
+
 
 
     return (
@@ -216,8 +202,6 @@ export default function ExpenseRecord() {
                                     <th>Amount</th>
                                     <th>Description</th>
                                     <th>Category</th>
-                                    {/* {edit && <th>Edit</th>} */}
-                                    {/* {dlt && <th>Delete</th>} */}
                                 </tr>
                             </thead>
                             <tbody>
