@@ -2,12 +2,15 @@ import React, { useRef, useState } from 'react'
 // import classes from "./NewExpense.module.css"
 import { Button, Col, Form, Row } from 'react-bootstrap'
 import LoadingSpinner from "../UI/LoadingSpinner"
+import { useSelector } from 'react-redux';
 
 export default function NewExpense(props) {
     const amount = useRef();
     const expenseDate = useRef();
     const category = useRef();
     const descr = useRef();
+
+    const database_api = useSelector(state => state.expenses.database_api);
 
     const [loading, setLoading] = useState(false);
     const addExpense_handler = async (e) => {
@@ -29,7 +32,7 @@ export default function NewExpense(props) {
 
         setLoading(true);
         try {
-            const res = await fetch(`https://ultimate-expense-tracker-8f09c-default-rtdb.firebaseio.com/${filtered_email}.json`, {
+            const res = await fetch(`${database_api}/${filtered_email}.json`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': "application/json"

@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { Col, Form, Button } from 'react-bootstrap';
 import LoadingSpinner from "../UI/LoadingSpinner"
 import Overlay from '../UI/Overlay';
+import { useSelector } from 'react-redux';
 
 export default function ForgetPassword() {
     const email = useRef();
@@ -26,11 +27,13 @@ export default function ForgetPassword() {
         history.push("/");
     }
 
+    const api_key = useSelector(state => state.auth.api_key);
+
     const forgetRequest_handler = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            let res = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCTW5LuWc52S9DpPQ2hVQuk23_8jUrhY0A", {
+            const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${api_key}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': "application/json"
@@ -40,7 +43,7 @@ export default function ForgetPassword() {
                     email: email.current.value
                 })
             })
-            let data = await res.json();
+            const data = await res.json();
             // console.log(data);
             if (!res.ok) {
                 throw new Error(data.error.message);
@@ -95,7 +98,7 @@ export default function ForgetPassword() {
                     </Form>
                 </Col>
                 {!loading && <button className={`${classes.optionBtn} shadow-lg`} onClick={forgetPassword_handler}>
-                    Don't Have An Account? Sign Up
+                    Have An Account? Login
                 </button>}
             </Col>
         </React.Fragment>

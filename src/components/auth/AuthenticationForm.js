@@ -1,12 +1,16 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Form, Button, Col } from 'react-bootstrap'
 import classes from "./AuthenticationForm.module.css"
 import LoadingSpinner from "../UI/LoadingSpinner"
 import Overlay from '../UI/Overlay'
-import AuthContext from '../store/auth-context'
+// import AuthContext from '../store/auth-context'
 import { useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { authActions } from '../../redux-store/authSlice'
 
 export default function AuthenticationForm() {
+    const dispatch = useDispatch();
+
     const email = useRef();
     const password = useRef();
     const confirmPassword = useRef();
@@ -36,7 +40,9 @@ export default function AuthenticationForm() {
         });
     }
 
-    const authCtx = useContext(AuthContext);
+    // const authCtx = useContext(AuthContext);
+
+    const api_key = useSelector(state => state.auth.api_key);
 
     const auth_handler = async (e) => {
         e.preventDefault();
@@ -74,7 +80,7 @@ export default function AuthenticationForm() {
         if (signUp) {
             setLoading(true);
             try {
-                let res = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCTW5LuWc52S9DpPQ2hVQuk23_8jUrhY0A", {
+                let res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${api_key}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': "application/json"
@@ -103,7 +109,7 @@ export default function AuthenticationForm() {
         else {
             setLoading(true);
             try {
-                let res = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCTW5LuWc52S9DpPQ2hVQuk23_8jUrhY0A", {
+                let res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${api_key}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': "application/json"
@@ -121,7 +127,8 @@ export default function AuthenticationForm() {
                 // console.log(data);
                 localStorage.setItem("tokenId", data.idToken);
                 localStorage.setItem("user_email", data.email);
-                authCtx.loginStatus_handler(data.idToken, data, data.profilePicture);
+                dispatch(authActions.login_handler({ idToken: data.idToken, fullName: data.displayName, picture: data.profilePicture }));
+                // authCtx.loginStatus_handler(data.idToken, data, data.profilePicture);
                 setLoading(false);
             }
             catch (err) {
@@ -139,7 +146,7 @@ export default function AuthenticationForm() {
         const checkLoggedIn = async () => {
             const userToken = localStorage.getItem("tokenId");
             try {
-                const res = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCTW5LuWc52S9DpPQ2hVQuk23_8jUrhY0A", {
+                const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${api_key}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': "application/json"
@@ -149,12 +156,14 @@ export default function AuthenticationForm() {
                     })
                 })
                 const data = await res.json();
+                // console.log(data);
                 if (!res.ok) {
                     console.log(data);
                     throw new Error(data.error.message);
                 }
                 if (data.users[0].email === localStorage.getItem("user_email")) {
-                    authCtx.loginStatus_handler(userToken, data.users[0], data.users[0].photoUrl);
+                    // authCtx.loginStatus_handler(userToken, data.users[0], data.users[0].photoUrl);
+                    dispatch(authActions.login_handler({ idToken: userToken, fullName: data.users[0].displayName, picture: data.users[0].photoUrl }));
                 }
             }
             catch (err) {
@@ -165,7 +174,7 @@ export default function AuthenticationForm() {
         if (localStorage.getItem("tokenId")) {
             checkLoggedIn();
         }
-    }, [authCtx])
+    }, [dispatch, api_key])
 
     return (
         <React.Fragment>

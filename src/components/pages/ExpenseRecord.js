@@ -5,10 +5,13 @@ import NewExpense from './NewExpense';
 import Overlay from "../UI/Overlay";
 import ExpenseItem from '../layouts/ExpenseItem';
 import Filter from '../layouts/Filter';
+import { useSelector, useDispatch } from 'react-redux';
+import { expensesActions } from '../../redux-store/expensesSlice';
 
 export default function ExpenseRecord() {
 
     // api url --------------------------
+    const database_api = useSelector(state => state.expenses.database_api);
     const userEmail = localStorage.getItem("user_email");
     let filtered_email = "";
 
@@ -18,9 +21,9 @@ export default function ExpenseRecord() {
         }
     }
 
-    const api_url = `https://ultimate-expense-tracker-8f09c-default-rtdb.firebaseio.com/${filtered_email}`
+    const api_url = `${database_api}/${filtered_email}`
 
-    // ______________________________
+    // ___________________________________
 
     const [overlay, setOverlay] = useState({
         isTrue: false,
@@ -29,11 +32,10 @@ export default function ExpenseRecord() {
     const [dlt, setDlt] = useState(false);
     const [edit, setEdit] = useState(true);
     const [newExpense, setNewExpense] = useState(false);
-    const [expenses, setExpenses] = useState([]);
+    // const [expenses, setExpenses] = useState([]);
+    const expenses = useSelector(state => state.expenses.allExpense);
     const [filteredExpenses, setFilteredExpenses] = useState([]);
-
-    // console.log(expenses);
-    // console.log(filteredExpenses);
+    const dispatch = useDispatch();
 
     const newExpense_handler = () => {
         setNewExpense((prv) => !prv);
@@ -65,12 +67,17 @@ export default function ExpenseRecord() {
             })
             setFilteredExpenses(filterExpenses);
         }
-    }
+    };
 
     const add_expense = (obj) => {
-        setExpenses((prv) => {
-            return [...prv, obj]
-        });
+        // add in expenses\
+        dispatch(expensesActions.addExpense(obj));
+
+
+        // add in filtered expenses
+        setFilteredExpenses((prv) => {
+            return [...prv, obj];
+        })
         setNewExpense(false);
     }
 
@@ -88,12 +95,23 @@ export default function ExpenseRecord() {
             if (!res.ok) {
                 throw new Error(data.error);
             }
+
+            // edit in expenses
             const index = expenses.findIndex((expense) => {
                 return expense.id === newDetails.id
             })
             const newExpenses = [...expenses];
             newExpenses[index] = newDetails;
-            setExpenses(newExpenses);
+            dispatch(expensesActions.editExpense(newExpenses));
+
+            //  edit in filtered expenses
+            const filterIndex = filteredExpenses.findIndex((item) => {
+                return item.id === newDetails.id;
+            })
+            const newFilteredExpenses = [...filteredExpenses];
+            newFilteredExpenses[filterIndex] = newDetails;
+            setFilteredExpenses(newFilteredExpenses);
+
             return true;
         }
         catch (err) {
@@ -114,15 +132,23 @@ export default function ExpenseRecord() {
             if (!res.ok) {
                 throw new Error(data.error);
             }
+
+            // delete from expenses
             const index = expenses.findIndex((expense) => {
                 return expense.id === id
             })
-            // console.log(index);
-            // console.log(expenses);
             const newExpenses = [...expenses];
             newExpenses.splice(index, 1);
-            // console.log(newExpenses);
-            setExpenses(newExpenses);
+            dispatch(expensesActions.editExpense(newExpenses));
+
+            // delete from filtered expenses
+            const filterIndex = filteredExpenses.findIndex((item) => {
+                return item.id === id;
+            })
+            const newFilteredExpenses = [...filteredExpenses];
+            newFilteredExpenses.splice(filterIndex, 1);
+            setFilteredExpenses(newFilteredExpenses);
+
             setOverlay({
                 isTrue: true,
                 message: "Deleted Successfully"
@@ -156,7 +182,7 @@ export default function ExpenseRecord() {
                         descr: data[key].descr
                     })
                 }
-                setExpenses(all_expenses);
+                dispatch(expensesActions.editExpense(all_expenses));
                 setFilteredExpenses(all_expenses);
             }
             catch (err) {
@@ -164,11 +190,9 @@ export default function ExpenseRecord() {
             }
         }
         firstFetch();
-        // return () => {
-        //     console.log(111);
-        //     setFilteredExpenses(expenses);
-        // }
-    }, [api_url])
+    }, [api_url, dispatch])
+
+
 
     return (
         <React.Fragment>
@@ -201,7 +225,7 @@ export default function ExpenseRecord() {
                                     return <ExpenseItem key={expense.id} edit={edit} dlt={dlt} expense={expense} editExpense={editExpense_handler} deleteExpense={deleteExpense_handler} />
                                 })}
                                 {filteredExpenses.length === 0 && <tr>
-                                    <td colSpan={4}><h2 className='text-center'>No Expenses Yet...</h2></td>
+                                    <td colSpan={4}><h2 className='text-center fs-4 py-4'>No Expenses Found Yet...</h2></td>
                                 </tr>}
                             </tbody>
                         </Table>

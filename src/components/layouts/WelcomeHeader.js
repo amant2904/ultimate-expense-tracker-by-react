@@ -1,8 +1,10 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { Link, useHistory } from 'react-router-dom'
 import classes from "./WelcomeHeader.module.css"
-import AuthContext from '../store/auth-context'
+// import AuthContext from '../store/auth-context'
+import { useDispatch, useSelector } from 'react-redux'
+import { authActions } from '../../redux-store/authSlice'
 
 export default function WelcomeHeader(props) {
     const updatingProfile = props.editing;
@@ -11,19 +13,20 @@ export default function WelcomeHeader(props) {
         props.editProfile();
     }
 
-    const authCtx = useContext(AuthContext);
+    // const authCtx = useContext(AuthContext);
+    const dispatch = useDispatch();
     const history = useHistory();
     const logout_handler = () => {
         localStorage.removeItem("tokenId");
         localStorage.removeItem("user_email");
-        authCtx.loginStatus_handler()
+        // authCtx.loginStatus_handler()
+        dispatch(authActions.logout_handler())
         history.replace("/");
     }
 
-    const profile = authCtx.photoUrl;
-    const fullName = authCtx.fullName;
-
-    // const incompleteContent = <p></p>
+    const profile = useSelector(state => state.auth.photoUrl);
+    // const profile = authCtx.photoUrl;
+    const fullName = useSelector(state => state.auth.fullName);
 
     return (
         <Container fluid className={`m-0 p-0 fixed ${classes.header}`}>

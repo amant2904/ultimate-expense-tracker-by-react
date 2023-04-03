@@ -33,7 +33,7 @@ export default function ExpenseItem(props) {
         setNewCategory(e.target.value);
     }
 
-    const editExpense_handler = () => {
+    const editExpense_handler = (props) => {
         setIsEditing(true);
         setId(idRef.current.innerText);
         setNewDate(date.current.innerText);
@@ -77,6 +77,7 @@ export default function ExpenseItem(props) {
                 </td>}
                 <td ref={idRef} hidden>{props.expense.id}</td>
             </tr>}
+
             {isEditing && <tr className={classes.tableRow_form}>
                 <td>
                     <Form.Control type="date" onChange={newDate_handler} value={newDate} />

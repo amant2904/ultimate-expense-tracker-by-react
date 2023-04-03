@@ -1,10 +1,11 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Container, Form, Row, Col, Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import classes from "./Profile.module.css"
-import AuthContext from '../store/auth-context'
+// import AuthContext from '../store/auth-context'
 import LoadingSpinner from '../UI/LoadingSpinner'
 import Overlay from '../UI/Overlay'
+import { useSelector } from 'react-redux'
 
 export default function Profile(props) {
     const editing = props.editing;
@@ -37,6 +38,8 @@ export default function Profile(props) {
         setStartEditing(false);
     }
 
+    const api_key = useSelector(state => state.auth.api_key)
+
     const profileUpdate_handler = async (e) => {
         setLoading(true);
         e.preventDefault();
@@ -48,7 +51,7 @@ export default function Profile(props) {
             returnSecureToken: true
         }
         try {
-            const res = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCTW5LuWc52S9DpPQ2hVQuk23_8jUrhY0A", {
+            const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:update?key=${api_key}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': "application/json"
@@ -71,7 +74,10 @@ export default function Profile(props) {
         setLoading(false);
     }
 
-    const authCtx = useContext(AuthContext);
+    // const authCtx = useContext(AuthContext);
+    const userName = useSelector(state => state.auth.fullName);
+    const userProfile = useSelector(state => state.auth.photoUrl);
+
 
     const editHandler = () => {
         props.editProfile();
@@ -96,8 +102,8 @@ export default function Profile(props) {
                                 Full Name :
                             </Form.Label>
                             <Col sm={9}>
-                                {(authCtx.fullName && !startEditing) ?
-                                    <Form.Control type="text" placeholder="Enter Name" value={authCtx.fullName} ref={fullName} disabled /> :
+                                {(userName && !startEditing) ?
+                                    <Form.Control type="text" placeholder="Enter Name" value={userName} ref={fullName} disabled /> :
                                     <Form.Control type="text" placeholder="Enter Name" ref={fullName} />
                                 }
                             </Col>
@@ -108,8 +114,8 @@ export default function Profile(props) {
                                 Profile Photo URL :
                             </Form.Label>
                             <Col sm={9}>
-                                {(authCtx.photoUrl && !startEditing) ?
-                                    <Form.Control type="url" placeholder="Enter URL" value={authCtx.photoUrl} ref={photoUrl} disabled /> :
+                                {(userProfile && !startEditing) ?
+                                    <Form.Control type="url" placeholder="Enter URL" value={userProfile} ref={photoUrl} disabled /> :
                                     <Form.Control type="url" placeholder="Enter URL" ref={photoUrl} />
                                 }
                             </Col>
@@ -137,7 +143,7 @@ export default function Profile(props) {
                 {!editing && <Row className={`mt-4`}>
                     <Col className={`d-flex align-items-center justify-content-center`} sm={5}>
                         <div className={`${classes.userProfilePic}`}>
-                            <img src={authCtx.photoUrl} alt="profile" height={"100%"} width={"100%"} />
+                            <img src={userProfile} alt="profile" height={"100%"} width={"100%"} />
                         </div>
                     </Col>
                     <Col className={`${classes.userDetails}`}>
@@ -146,7 +152,7 @@ export default function Profile(props) {
                                 <p>Full Name :- </p>
                             </Col>
                             <Col>
-                                <p className={`text-left`}>{authCtx.fullName}</p>
+                                <p className={`text-left`}>{userName}</p>
                             </Col>
                         </Row>
                         <Row>

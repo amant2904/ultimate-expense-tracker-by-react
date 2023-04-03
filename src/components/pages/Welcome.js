@@ -1,12 +1,13 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Container } from 'react-bootstrap'
 import classes from "./Welcome.module.css"
 import WelcomeHeader from '../layouts/WelcomeHeader'
 import Profile from './Profile'
 import { Switch, Route } from 'react-router-dom'
 import VarifyEmail from '../layouts/VarifyEmail'
-import AuthContext from '../store/auth-context'
+// import AuthContext from '../store/auth-context'
 import ExpenseRecord from './ExpenseRecord'
+import { useSelector } from 'react-redux'
 
 export default function Welcome() {
     const [editing, setEditing] = useState(false);
@@ -14,17 +15,21 @@ export default function Welcome() {
         setEditing((prv) => !prv);
     }
 
-    const authCtx = useContext(AuthContext);
+    const emailVerified = useSelector(state => state.auth.verified)
+
+    // console.log(emailVerified);
+
+    // const authCtx = useContext(AuthContext);
     // console.log(authCtx.verified);
 
     return (
         <Container className={`${classes.welcome}`} fluid>
             <WelcomeHeader editProfile={editProfile_handler} editing={editing} />
             <Switch>
-                {!authCtx.verified && <Route exact path="/">
+                {!emailVerified && <Route exact path="/">
                     <VarifyEmail />
                 </Route>}
-                {authCtx.verified && <Route exact path="/">
+                {emailVerified && <Route exact path="/">
                     <ExpenseRecord />
                 </Route>}
                 <Route path="/profile">

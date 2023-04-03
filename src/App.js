@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import './App.css';
 import Authentication from './components/pages/Authentication';
-import AuthContext from './components/store/auth-context';
 import Welcome from './components/pages/Welcome.js';
+import { useSelector } from 'react-redux';
 
 function App() {
-  const authCtx = useContext(AuthContext);
-  const isLoggedIn = authCtx.isLoggedIn
+  const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
   return (
     <React.Fragment>
       {!isLoggedIn && <Authentication />}

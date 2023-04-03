@@ -1,13 +1,16 @@
-import React, { useCallback, useEffect, useState, useContext } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import classes from "./VarifyEmail.module.css"
 import LoadingSpinner from '../UI/LoadingSpinner';
 import Overlay from '../UI/Overlay';
-import AuthContext from '../store/auth-context';
+// import AuthContext from '../store/auth-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions } from '../../redux-store/authSlice';
 
 export default function VarifyEmail() {
 
-    const authCtx = useContext(AuthContext);
+    // const authCtx = useContext(AuthContext);
+    const dispatch = useDispatch();
     const [verify, setVerify] = useState(false);
     const [loading, setLoading] = useState(false);
     const [overlay, setOverlay] = useState({
@@ -23,11 +26,13 @@ export default function VarifyEmail() {
         })
     }
 
+    const api_key = useSelector(state => state.auth.api_key)
+
     const verifyEmail_handler = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCTW5LuWc52S9DpPQ2hVQuk23_8jUrhY0A", {
+            const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${api_key}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': "application/json"
@@ -56,7 +61,7 @@ export default function VarifyEmail() {
     const checkVerification_handler = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyCTW5LuWc52S9DpPQ2hVQuk23_8jUrhY0A", {
+            const res = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${api_key}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': "application/json"
@@ -71,7 +76,8 @@ export default function VarifyEmail() {
                 throw new Error(data);
             }
             if (data.users[0].emailVerified === true) {
-                authCtx.verificationHandler(true)
+                // authCtx.verificationHandler(true)
+                dispatch(authActions.verification(true))
             }
             else {
                 setVerify(false);
@@ -87,11 +93,11 @@ export default function VarifyEmail() {
             }
         }
         setLoading(false);
-    }, [authCtx])
+    }, [dispatch, api_key])
 
     useEffect(() => {
         checkVerification_handler();
-    }, [checkVerification_handler, authCtx])
+    }, [checkVerification_handler, api_key])
 
     return (
         <React.Fragment>
