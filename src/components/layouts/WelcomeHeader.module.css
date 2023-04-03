@@ -4,6 +4,13 @@
     top: 0;
 }
 
+.headerDark{
+    /* background-color: transparent; */
+    background-color: #98a1a4;;
+    position: sticky;
+    top: 0;
+}
+
 /* logo css */
 .logo{
     display: flex;

@@ -7,6 +7,7 @@ import ExpenseItem from '../layouts/ExpenseItem';
 import Filter from '../layouts/Filter';
 import { useSelector, useDispatch } from 'react-redux';
 import { expensesActions } from '../../redux-store/expensesSlice';
+import SideFeatures from '../layouts/SideFeatures';
 
 export default function ExpenseRecord() {
 
@@ -32,13 +33,14 @@ export default function ExpenseRecord() {
     const [dlt, setDlt] = useState(false);
     const [edit, setEdit] = useState(true);
     const [newExpense, setNewExpense] = useState(false);
-    const expenses = useSelector(state => state.expenses.allExpense);
-    const [filteredExpenses, setFilteredExpenses] = useState([]);
-    const dispatch = useDispatch();
+    const expenses = useSelector(state => state.expenses.allExpense)
+    const totalAmount = useSelector(state => state.expenses.totalAmount)
+    const dispatch = useDispatch()
+
+    console.log(totalAmount);
 
     const newExpense_handler = () => {
         setNewExpense((prv) => !prv);
-        setFilteredExpenses(expenses);
     }
 
     const edit_dlt_handler = () => {
@@ -52,25 +54,6 @@ export default function ExpenseRecord() {
             message: ""
         })
     }
-
-    const [filterYear, setFilterYear] = useState("all");
-    const filterExpense_handler = (filterValue) => {
-
-        setFilterYear(filterValue)
-        if (filterValue === "all") {
-            setFilteredExpenses(expenses);
-        }
-        else {
-            const filterExpenses = expenses.filter((expenseItem) => {
-                const year = new Date(expenseItem.date).getFullYear();
-                if (year.toString() === filterValue) {
-                    return expenseItem;
-                }
-                return null;
-            })
-            setFilteredExpenses(filterExpenses);
-        }
-    };
 
     const add_expense = (obj) => {
         // add in expenses
@@ -99,7 +82,10 @@ export default function ExpenseRecord() {
             })
             const newExpenses = [...expenses];
             newExpenses[index] = newDetails;
-            dispatch(expensesActions.editExpense(newExpenses));
+            const totalAmount = newExpenses.reduce((init, expense) => {
+                return init + parseInt(expense.amount);
+            }, 0)
+            dispatch(expensesActions.editExpense({ all: newExpenses, totalAmount: totalAmount }));
             return true;
         }
         catch (err) {
@@ -127,7 +113,10 @@ export default function ExpenseRecord() {
             })
             const newExpenses = [...expenses];
             newExpenses.splice(index, 1);
-            dispatch(expensesActions.editExpense(newExpenses));
+            const totalAmount = newExpenses.reduce((init, expense) => {
+                return init + parseInt(expense.amount);
+            }, 0)
+            dispatch(expensesActions.editExpense({ all: newExpenses, totalAmount: totalAmount }));
 
             setOverlay({
                 isTrue: true,
@@ -162,8 +151,7 @@ export default function ExpenseRecord() {
                         descr: data[key].descr
                     })
                 }
-                dispatch(expensesActions.editExpense(all_expenses));
-                setFilteredExpenses(all_expenses);
+                dispatch(expensesActions.firstFetch(all_expenses));
             }
             catch (err) {
                 console.log(err.message);
@@ -171,14 +159,6 @@ export default function ExpenseRecord() {
         }
         firstFetch();
     }, [api_url, dispatch])
-
-    useEffect(() => {
-        if (filterYear) {
-            filterExpense_handler(filterYear);
-        }
-    }, [expenses]);
-
-
 
     return (
         <React.Fragment>
@@ -194,7 +174,7 @@ export default function ExpenseRecord() {
                         </Col>
                     </Col>
                     {!newExpense && <Col lg={8}>
-                        <Filter filterExpense={filterExpense_handler} />
+                        <Filter />
                         <Table className={``}>
                             <thead>
                                 <tr className={`${classes.table_row}`}>
@@ -205,19 +185,21 @@ export default function ExpenseRecord() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredExpenses.map((expense) => {
+                                {expenses.map((expense) => {
                                     return <ExpenseItem key={expense.id} edit={edit} dlt={dlt} expense={expense} editExpense={editExpense_handler} deleteExpense={deleteExpense_handler} />
                                 })}
-                                {filteredExpenses.length === 0 && <tr>
+                                {expenses.length === 0 && <tr>
                                     <td colSpan={4}><h2 className='text-center fs-4 py-4'>No Expenses Found Yet...</h2></td>
                                 </tr>}
                             </tbody>
                         </Table>
+                        <Row className={`justify-content-between align-items-center px-5`}>
+                            <p className={`w-auto fs-3`}><b>Total Expense :-</b></p>
+                            <p className={`w-auto fs-3 bg-dark text-light`}>Rs. <span>{totalAmount}</span></p>
+                        </Row>
                     </Col>}
                     {newExpense && <NewExpense cancelAdding={newExpense_handler} addExpense={add_expense} />}
-                    <Col lg={2}>
-
-                    </Col>
+                    <SideFeatures />
                 </Row>
             </Container>
         </React.Fragment>

@@ -15,15 +15,11 @@ export default function Welcome() {
         setEditing((prv) => !prv);
     }
 
-    const emailVerified = useSelector(state => state.auth.verified)
-
-    // console.log(emailVerified);
-
-    // const authCtx = useContext(AuthContext);
-    // console.log(authCtx.verified);
+    const emailVerified = useSelector(state => state.auth.verified);
+    const themeMode = useSelector(state => state.theme.mode);
 
     return (
-        <Container className={`${classes.welcome}`} fluid>
+        <Container className={`${(themeMode) ? classes.welcome : classes.welcomeDark}`} fluid>
             <WelcomeHeader editProfile={editProfile_handler} editing={editing} />
             <Switch>
                 {!emailVerified && <Route exact path="/">

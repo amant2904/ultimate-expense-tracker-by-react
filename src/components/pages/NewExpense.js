@@ -14,6 +14,7 @@ export default function NewExpense(props) {
     const descr = useRef();
 
     const database_api = useSelector(state => state.expenses.database_api);
+    const totalAmount = useSelector(state => state.expenses.totalAmount);
 
     const cancel_premium = () => {
         setPremiumBtn(false);
@@ -21,7 +22,7 @@ export default function NewExpense(props) {
 
     const addExpense_handler = async (e) => {
         e.preventDefault();
-        if (parseInt(amount.current.value) > 10000) {
+        if (totalAmount + parseInt(amount.current.value) > 10000) {
             setPremiumBtn(true);
             return;
         }
@@ -32,6 +33,7 @@ export default function NewExpense(props) {
             category: category.current.value,
             descr: descr.current.value
         }
+        console.log(expense_details);
         const userEmail = localStorage.getItem("user_email");
         let filtered_email = "";
 

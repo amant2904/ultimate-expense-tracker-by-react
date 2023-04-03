@@ -28,8 +28,10 @@ export default function WelcomeHeader(props) {
     // const profile = authCtx.photoUrl;
     const fullName = useSelector(state => state.auth.fullName);
 
+    const themeMode = useSelector(state => state.theme.mode);
+
     return (
-        <Container fluid className={`m-0 p-0 fixed ${classes.header}`}>
+        <Container fluid className={`m-0 p-0 fixed ${(themeMode) ? classes.header : classes.headerDark}`}>
             <Row>
                 <Col>
                     <div className={`${classes.logo}`}>
