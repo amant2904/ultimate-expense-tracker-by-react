@@ -36,6 +36,7 @@ export default function ExpenseRecord() {
     const expenses = useSelector(state => state.expenses.allExpense)
     const totalAmount = useSelector(state => state.expenses.totalAmount)
     const dispatch = useDispatch()
+    const themeMode = useSelector(state => state.theme.mode);
 
     console.log(totalAmount);
 
@@ -164,8 +165,8 @@ export default function ExpenseRecord() {
         <React.Fragment>
             {overlay.isTrue && <Overlay message={overlay.message} onClick={overlayClose_handler} />}
             <Container fluid className={`m-0 p-0`}>
-                {!newExpense && <h1 className={`text-center ${classes.mainHeading}`}>Expense Records</h1>}
-                {newExpense && <h1 className={`text-center ${classes.mainHeading}`}>Add New Expense</h1>}
+                {!newExpense && <h1 className={`text-center ${classes.mainHeading} ${(themeMode) ? "" : "text-light"}`}>Expense Records</h1>}
+                {newExpense && <h1 className={`text-center ${classes.mainHeading} ${(themeMode) ? "" : "text-light"}`}>Add New Expense</h1>}
                 <Row className={`mt-3`}>
                     <Col lg={2} className={`${classes.newExpense_col}`}>
                         <Col className={`${classes.fixedPart} `}>
@@ -175,7 +176,7 @@ export default function ExpenseRecord() {
                     </Col>
                     {!newExpense && <Col lg={8}>
                         <Filter />
-                        <Table className={``}>
+                        <Table className={`${(themeMode) ? "" : "text-light"}`}>
                             <thead>
                                 <tr className={`${classes.table_row}`}>
                                     <th>Date</th>
@@ -194,8 +195,8 @@ export default function ExpenseRecord() {
                             </tbody>
                         </Table>
                         <Row className={`justify-content-between align-items-center px-5`}>
-                            <p className={`w-auto fs-3 m-0`}><b>Total Expense :-</b></p>
-                            <p className={`w-auto fs-3 bg-dark text-light my-2`}>Rs. <span>{totalAmount}</span></p>
+                            <p className={`w-auto fs-3 m-0 ${(themeMode) ? "" : "text-light"}`}><b>Total Expense :-</b></p>
+                            <p className={`w-auto fs-3 my-2 ${(themeMode) ? "text-light bg-dark" : "text-light bg-primary"} rounded-1`}>Rs. <span>{totalAmount}</span></p>
                         </Row>
                     </Col>}
                     {newExpense && <NewExpense cancelAdding={newExpense_handler} addExpense={add_expense} />}

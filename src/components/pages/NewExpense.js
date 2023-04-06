@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import PremiumBtn from '../layouts/PremiumBtn';
 
 export default function NewExpense(props) {
+    const themeMode = useSelector(state => state.theme.mode);
     const isPremium = useSelector(state => state.auth.premium);
     const [premiumBtn, setPremiumBtn] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -73,7 +74,7 @@ export default function NewExpense(props) {
         <React.Fragment>
             {!premiumBtn && <Col lg={8}>
                 <Button variant='danger' onClick={props.cancelAdding} className={`my-4 px-4 py-2`}>Cancel Adding Expense</Button>
-                <Form>
+                <Form className={`${(themeMode) ? "" : "text-light"}`}>
                     <Row>
                         <Col>
                             <Form.Group className="mb-3" controlId="amount">

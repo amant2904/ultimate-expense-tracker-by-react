@@ -11,11 +11,11 @@
 }
 .darkThemeBtn{
     margin-top: 40px;
-    background-color: #163111;
+    background-color: #246449;
     color: white;
 }
 .darkThemeBtn:hover{
-    background-color: #22501a;
+    background-color: rgb(27, 63, 21);
 }
 .lightThemeBtn{
     margin-top: 40px;

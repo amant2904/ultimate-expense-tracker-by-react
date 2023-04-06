@@ -26,9 +26,7 @@ export default function WelcomeHeader(props) {
     }
 
     const profile = useSelector(state => state.auth.photoUrl);
-    // const profile = authCtx.photoUrl;
     const fullName = useSelector(state => state.auth.fullName);
-
     const themeMode = useSelector(state => state.theme.mode);
 
     return (
@@ -36,8 +34,8 @@ export default function WelcomeHeader(props) {
             <Row>
                 <Col>
                     <div className={`${classes.logo}`}>
-                        <h1>ULTIMATE</h1>
-                        <h2 className={`m-0`}>EXPENSE TRACKER</h2>
+                        <h1 className={`${(themeMode) ? "" : "text-light"}`}>ULTIMATE</h1>
+                        <h2 className={`m-0 ${(themeMode) ? "" : "text-light"}`}>EXPENSE TRACKER</h2>
                         {isPremium && <p className={`${classes.premiumTag}`}>Premium</p>}
                     </div>
                 </Col>

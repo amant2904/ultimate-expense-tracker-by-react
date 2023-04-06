@@ -3,7 +3,6 @@ import { Container } from 'react-bootstrap'
 import classes from "./VarifyEmail.module.css"
 import LoadingSpinner from '../UI/LoadingSpinner';
 import Overlay from '../UI/Overlay';
-// import AuthContext from '../store/auth-context';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../../redux-store/authSlice';
 
